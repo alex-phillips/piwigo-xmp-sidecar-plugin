@@ -63,6 +63,18 @@ function import_xmp_sidecar($exif, $filename)
             foreach ($xmpData[$key] as $li => $val) $xmpData[$key][$li] = explode('|', $val);
             unset($li, $val);
         }
+
+        // If it's an array of values (i.e., keywords), then create a string value of it
+        if (is_array($xmpData[$key])) {
+            $xmpData[$key] = implode(',', $xmpData[$key]);
+        }
+    }
+
+    // Remove empty values
+    foreach ($xmpData as $key => $val) {
+        if (!$val) {
+            unset($xmpData[$key]);
+        }
     }
 
     $exif = array_merge($exif, $xmpData);
